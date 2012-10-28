@@ -33,4 +33,5 @@ type ChanStats struct {
 	channelName string
 	specs       []ChunkSpec
 	data        DataChunk
+	matcher     interface{Matcher}
 }

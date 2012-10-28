@@ -15,7 +15,7 @@ var wg sync.WaitGroup
 // all of these simultaneously.
 func Churn(file string, ch chan ChanStats) {
 	cs := LineChunks(4, file)
-	c := ChanStats{channelName: file, specs: cs}
+	c := ChanStats{channelName: file, specs: cs, matcher: new(IrssiMatcher) }
 	c.data = MapReduce(MapChunk, ReduceChunks, GetChunkSpecs(c), 4).(DataChunk)
 
 	ch <- c
