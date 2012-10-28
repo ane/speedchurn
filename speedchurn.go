@@ -14,7 +14,7 @@ var wg sync.WaitGroup
 // Churn processes a log file first by chunking it into parts and then mapreducing
 // all of these simultaneously.
 func Churn(file string, ch chan ChanStats) {
-	cs := lineChunks(4, file)
+	cs := LineChunks(4, file)
 	c := ChanStats{channelName: file, specs: cs}
 	c.data = MapReduce(MapChunk, ReduceChunks, GetChunkSpecs(c), 4).(DataChunk)
 
