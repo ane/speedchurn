@@ -32,5 +32,5 @@ func (a *DataChunk) Union(b DataChunk) {
 type ChanStats struct {
 	channelName string
 	specs       []ChunkSpec
-	data DataChunk
+	data        DataChunk
 }

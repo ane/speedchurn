@@ -37,7 +37,7 @@ func main() {
 		go Churn(file, ch)
 	}
 
-	go func() { wg.Wait(); close(ch)}()
+	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
 		fmt.Println(stats.data)
