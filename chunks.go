@@ -1,3 +1,6 @@
+// Copyright 2012 Antoine Kalmbach <ane@iki.fi>
+// Use of this source code is governed by a GPLv2 license
+// found in the LICENSE file.
 package main
 
 import (

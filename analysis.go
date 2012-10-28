@@ -1,12 +1,20 @@
 package main
 
-func Process(source interface{}, output chan interface{}) {
-	//spec := source.(ChunkSpec)
+func ReduceChunks(source chan interface{}, output chan interface{}) {
+	accumulated := DataChunk{}
+	for chunk := range source {
+		accumulated.Union(chunk.(DataChunk))
+	}
+	output <- accumulated
+}
+
+func MapChunk(source interface{}, output chan interface{}) {
+	// spec := source.(ChunkSpec)
 	// do something
 	output <- DataChunk{ImpertinentStats{}}
 }
 
-func GetSpecs(c ChanStats) chan interface{} {
+func GetChunkSpecs(c ChanStats) chan interface{} {
 	specChan := make(chan interface{})
 	// send chunkspecs one by one
 	go func() {

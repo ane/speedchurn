@@ -1,4 +1,8 @@
-// from https://github.com/dbravender/go_mapreduce/blob/master/src/mapreduce.go
+// Copyright 2012 Antoine Kalmbach <ane@iki.fi>
+// Use of this source code is governed by a GPLv2 license
+// found in the LICENSE file.
+//
+// adapted from https://github.com/dbravender/go_mapreduce/blob/master/src/mapreduce.go
 
 package main
 

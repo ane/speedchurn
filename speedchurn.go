@@ -1,3 +1,6 @@
+// Copyright 2012 Antoine Kalmbach <ane@iki.fi>
+// Use of this source code is governed by a GPLv2 license
+// found in the LICENSE file.
 package main
 
 import (
@@ -8,15 +11,16 @@ import (
 
 var wg sync.WaitGroup
 
+// Churn processes a log file first by chunking it into parts and then mapreducing
+// all of these simultaneously.
 func Churn(file string, ch chan ChanStats) {
 	cs := lineChunks(4, file)
 	c := ChanStats{channelName: file, specs: cs}
-	c.data = MapReduce(Process, ReduceChunks, GetSpecs(c), 4).(DataChunk)
+	c.data = MapReduce(MapChunk, ReduceChunks, GetChunkSpecs(c), 4).(DataChunk)
 
 	ch <- c
 	wg.Done()
 }
-
 
 func main() {
 	args := os.Args
