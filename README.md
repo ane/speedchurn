@@ -15,9 +15,9 @@ Installation
 
 If you do not have installed Go yet, get it from http://golang.org
 
-  git clone http://github.com/ane/speedchurn.git speedchurn
-  cd speedchurn && go build
-  speedchurn irclog.log
+    git clone http://github.com/ane/speedchurn.git speedchurn
+    cd speedchurn && go build
+    speedchurn irclog.log
 
 Background
 ----------
