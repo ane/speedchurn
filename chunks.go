@@ -10,6 +10,8 @@ import (
 	"os"
 )
 
+type Chunk []byte
+
 type ChunkSpec struct {
 	offset int64
 	length int64
@@ -55,4 +57,27 @@ func LineChunks(numChunks int, file string) []ChunkSpec {
 		offset = newOffset + untilNewLine
 	}
 	return specs
+}
+
+func LoadChunks(file string, specs []ChunkSpec) []Chunk {
+	chunks := make([]Chunk, len(specs))
+	fi, err := os.Open(file)
+	if err != nil {
+		panic("can't open file: " + file)
+	}
+	defer fi.Close()
+
+	reader := bufio.NewReader(fi)
+
+	for i, spec := range specs {
+		chunkbuf := make([]byte, spec.length)
+		fi.Seek(spec.offset, 0)
+		_, err := reader.Read(chunkbuf)
+		if err != nil {
+			panic("error reading chunk " + string(i))
+		}
+
+		chunks[i] = chunkbuf
+	}
+	return chunks
 }

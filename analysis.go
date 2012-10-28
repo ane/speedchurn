@@ -1,26 +1,40 @@
 package main
 
+import (
+	"bytes"
+	"fmt"
+	"io"
+)
+
 func ReduceChunks(source chan interface{}, output chan interface{}) {
-	accumulated := DataChunk{}
+	accumulated := StatsChunk{}
 	for chunk := range source {
-		accumulated.Union(chunk.(DataChunk))
+		accumulated.Union(chunk.(StatsChunk))
 	}
 	output <- accumulated
 }
 
 func MapChunk(source interface{}, output chan interface{}) {
-	// spec := source.(ChunkSpec)
-	output <- DataChunk{ImpertinentStats{}}
+	chunk := source.(Chunk)
+	buffer := bytes.NewBuffer(chunk)
+	for {
+		line, err := buffer.ReadBytes('\n')
+		if err != nil && err == io.EOF {
+			break
+		}
+		fmt.Println(string(line))
+	}
+	output <- StatsChunk{ImpertinentStats{}}
 }
 
-func GetChunkSpecs(c ChanStats) chan interface{} {
-	specChan := make(chan interface{})
-	// send chunkspecs one by one
+func GetChunks(c ChanStats) chan interface{} {
+	chunkChan := make(chan interface{})
+	// send chunkchunks one by one
 	go func() {
-		for _, spec := range c.specs {
-			specChan <- spec
+		for _, chunk := range c.chunks {
+			chunkChan <- chunk
 		}
-		close(specChan)
+		close(chunkChan)
 	}()
-	return specChan
+	return chunkChan
 }

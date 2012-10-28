@@ -12,7 +12,7 @@ type ImpertinentStats struct {
 	parts        int
 }
 
-type DataChunk struct {
+type StatsChunk struct {
 	impertinent ImpertinentStats
 }
 
@@ -25,13 +25,13 @@ func (a *ImpertinentStats) Union(b ImpertinentStats) {
 	a.parts += b.parts
 }
 
-func (a *DataChunk) Union(b DataChunk) {
+func (a *StatsChunk) Union(b StatsChunk) {
 	a.impertinent.Union(b.impertinent)
 }
 
 type ChanStats struct {
 	channelName string
-	specs       []ChunkSpec
-	data        DataChunk
+	chunks      []Chunk
+	stats       StatsChunk
 	matcher     interface{Matcher}
 }
