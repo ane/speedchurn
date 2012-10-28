@@ -10,7 +10,6 @@ func ReduceChunks(source chan interface{}, output chan interface{}) {
 
 func MapChunk(source interface{}, output chan interface{}) {
 	// spec := source.(ChunkSpec)
-	// do something
 	output <- DataChunk{ImpertinentStats{}}
 }
 
