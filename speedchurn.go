@@ -26,7 +26,7 @@ func main() {
 	args := os.Args
 
 	if len(args) < 2 {
-		panic("Usage: risa <log1> <log2> ... <logN>")
+		panic("Usage: speedchurn <log1> <log2> ... <logN>")
 	}
 
 	logs := args[1:]
