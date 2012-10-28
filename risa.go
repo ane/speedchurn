@@ -1,42 +1,41 @@
 package main
 
 import (
-	"os"
 	"fmt"
-	"io"
-	"bufio"
+	"os"
+	"sync"
 )
 
-func processLog(file string, c chan int) {
-	fi, err := os.Open(file)
-	if err != nil { panic("can't open file:" + file) }
-	defer fi.Close()
+var wg sync.WaitGroup
 
-	r := bufio.NewReader(fi)
-	buf := make([]byte, 1024)
-	fmt.Printf("Processing... ")
+func Churn(file string, ch chan ChanStats) {
+	cs := lineChunks(4, file)
+	c := ChanStats{channelName: file, specs: cs}
+	c.data = MapReduce(Process, ReduceChunks, GetSpecs(c), 4).(DataChunk)
 
-	for {
-		n, err := r.Read(buf)
-		if err != nil && err != io.EOF { panic(err) }
-
-		if n == 0 { break }
-
-		// do something
-		fmt.Printf(string(buf[:n]));
-	}
-
-	fmt.Printf("Done.\n")
-	c <- 1
+	ch <- c
+	wg.Done()
 }
+
 
 func main() {
 	args := os.Args
 
-	if len(args) != 2 { panic("Usage: risa <log>") }
+	if len(args) < 2 {
+		panic("Usage: risa <log1> <log2> ... <logN>")
+	}
 
-	cs := lineChunks(4, args[1])
-	for _, spec := range cs {
-		fmt.Println(spec)
+	logs := args[1:]
+	ch := make(chan ChanStats)
+
+	for _, file := range logs {
+		wg.Add(1)
+		go Churn(file, ch)
+	}
+
+	go func() { wg.Wait(); close(ch)}()
+
+	for stats := range ch {
+		fmt.Println(stats.data)
 	}
 }

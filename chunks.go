@@ -1,10 +1,10 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"bufio"
+	"fmt"
 	"io"
+	"os"
 )
 
 type ChunkSpec struct {
@@ -16,10 +16,11 @@ func (c ChunkSpec) String() string {
 	return fmt.Sprintf("ChunkSpec { offset: %d, length: %d }", c.offset, c.length)
 }
 
-
 func lineChunks(numChunks int, file string) []ChunkSpec {
 	fi, err := os.Open(file)
-	if err != nil { panic("can't open file: " + file) }
+	if err != nil {
+		panic("can't open file: " + file)
+	}
 	defer fi.Close()
 
 	info, err := os.Stat(file)
