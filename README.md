@@ -22,13 +22,13 @@ If you do not have installed Go yet, get it from http://golang.org
 Background
 ----------
 
-risa is a irc statistics generator that puts emphasis on informative and thorough
+speedchurn is a irc statistics generator that puts emphasis on informative and thorough
 statistics, clear visualization and most of all, speed. The status of current mainstream
 IRC statistics generators is very bad when it comes to large log files, and work on
 them has mostly stopped.
 
-As such, a much more faster stats generator that can properly exploit modern software design
-principles, e.g., concurrency, is called for. 
+As such, the development of a much faster stats generator capable of  properly exploiting 
+modern software design principles, e.g., concurrency, is called for. 
 
 speedchurn borrows a lot of principles from ane/hisg (with regards to concurrency and speed)
 and is the ideological successor to that project.
