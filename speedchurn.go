@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"runtime"
 )
 
 var wg sync.WaitGroup
@@ -19,6 +20,7 @@ func main() {
 		panic("Usage: speedchurn <log1> <log2> ... <logN>")
 	}
 
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	logs := args[1:]
 	ch := make(chan ChanStats)
 
