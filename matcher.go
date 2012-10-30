@@ -6,17 +6,21 @@ type Kick struct {
 }
 
 type Topic struct {
-	Content []byte
-	Changer []byte
-	Date []byte
+	Content string
+	Changer string
 }
 
 type Matcher interface {
-	DayChange([]byte) bool
-	Kick([]byte) []Kick
-	Topic([]byte) []Topic
+	Day([]byte) (bool, bool)
+	Kick([]byte) Kick
+	Topic([]byte) (bool, Topic)
 }
 
-func MatchDayChange(line []byte, m Matcher) (bool) {
-	return m.DayChange(line)
+func MatchDayChange(line []byte, m Matcher) (bool, interface{}) {
+	match, _ := m.Day(line)
+	return match, match
+}
+
+func MatchTopicChange(line []byte, m Matcher) (bool, interface{}) {
+	return m.Topic(line)
 }
