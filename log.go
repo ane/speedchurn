@@ -33,5 +33,7 @@ type ChanStats struct {
 	channelName string
 	chunks      []Chunk
 	stats       StatsChunk
-	matcher     interface{Matcher}
+	matcher     interface {
+		Matcher
+	}
 }
