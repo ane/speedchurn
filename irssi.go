@@ -12,8 +12,11 @@ var nickChars string = "A-Za-z\\[\\]\\\\`_\\^\\{\\|\\}"
 var chanChars string = "^\\r\\n\\0\\s,:"
 var timeStampPattern string = "\\d{2}:\\d{2}"
 var sepPattern string = "\\s-!-\\s"
+var modeChars string = "@\\s\\+%"
+
 var channel string = "([!&#\\+]+[" + chanChars + "]+)"
 var nickName string = "([" + nickChars + "]+)"
+
 
 func (im IrssiMatcher) Day(line []byte) (bool, bool) {
 	match, _ := regexp.Match("^--- Day changed", line)
@@ -31,4 +34,19 @@ func (im IrssiMatcher) Topic(line []byte) (bool, Topic) {
 		topic.Content = result[4]
 	}
 	return result != nil, topic
+}
+
+func (im IrssiMatcher) Regular(line []byte) (bool, Normal) {
+	expr := timeStampPattern + "\\s"
+	expr += "<[" + modeChars + "]+"
+	expr += nickName + ">\\s"
+	expr += "(.*)"
+	rel, _ := regexp.Compile(expr)
+	result := rel.FindStringSubmatch(string(line))
+	n := Normal{}
+	if result != nil {
+		n.Nick = result[1]
+		n.Content = result[2]
+	}
+	return result != nil, n
 }

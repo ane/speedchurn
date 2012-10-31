@@ -10,10 +10,22 @@ type Topic struct {
 	Changer string
 }
 
+type Timestamp struct {
+	Hour int
+	Minute int
+}
+
+type Normal struct {
+	Timestamp Timestamp
+	Nick string
+	Content string
+}
+
 type Matcher interface {
 	Day([]byte) (bool, bool)
 	Kick([]byte) Kick
 	Topic([]byte) (bool, Topic)
+	Regular([]byte) (bool, Normal)
 }
 
 func MatchDayChange(line []byte, m Matcher) (bool, interface{}) {
@@ -23,4 +35,8 @@ func MatchDayChange(line []byte, m Matcher) (bool, interface{}) {
 
 func MatchTopicChange(line []byte, m Matcher) (bool, interface{}) {
 	return m.Topic(line)
+}
+
+func MatchNormal(line []byte, m Matcher) (bool, interface{}) {
+	return m.Regular(line)
 }

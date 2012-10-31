@@ -5,6 +5,7 @@ import (
 	"io"
 	"reflect"
 	"runtime"
+	"strings"
 )
 
 func ReduceChunks(source chan interface{}, output chan interface{}) {
@@ -19,6 +20,8 @@ func MapChunk(source interface{}, output chan interface{}) {
 	chunk := source.(Chunk)
 	buffer := bytes.NewBuffer(chunk)
 	impStats := ImpertinentStats{}
+	relStats := RelevantStats{}
+	relStats.Users = make(map [string]UserStats)
 	for {
 		line, err := buffer.ReadBytes('\n')
 		if err != nil && err == io.EOF {
@@ -32,14 +35,26 @@ func MapChunk(source interface{}, output chan interface{}) {
 				impStats.dayChanges += 1
 			case Topic:
 				impStats.topicChanges += 1
+			case Normal:
+				w := what.(Normal)
+				v, pres := relStats.Users[w.Nick]
+				wordCount := len(strings.Split(w.Content, " "))
+				if pres {
+					v.Lines += 1
+					v.Words += wordCount
+					relStats.Users[w.Nick] = v
+				} else {
+					relStats.Users[w.Nick] = UserStats{Lines: 1, Words: wordCount}
+				}
 			}
+
 		}
 	}
-	output <- StatsChunk{impStats}
+	output <- StatsChunk{impStats, relStats}
 }
 
 func Match(line []byte, m Matcher) interface{} {
-	methods := []func([]byte, Matcher) (bool, interface{}){MatchDayChange, MatchTopicChange}
+	methods := []func([]byte, Matcher) (bool, interface{}){MatchDayChange, MatchTopicChange, MatchNormal}
 	// multiplex the matching to all matcher methods
 	for i := 0; i < len(methods); i++ {
 		match, res := methods[i](line, m)
