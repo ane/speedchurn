@@ -4,7 +4,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"runtime"
 	"sync"
@@ -12,6 +11,9 @@ import (
 
 var wg sync.WaitGroup
 var matcher Matcher = new(IrssiMatcher)
+
+type debugging bool
+const debug debugging  = true
 
 func main() {
 	args := os.Args
@@ -32,6 +34,6 @@ func main() {
 	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
-		fmt.Println(stats.stats)
+		debug.Println(stats.stats)
 	}
 }
