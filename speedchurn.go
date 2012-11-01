@@ -13,7 +13,8 @@ var wg sync.WaitGroup
 var matcher Matcher = new(IrssiMatcher)
 
 type debugging bool
-const debug debugging  = true
+
+const debug debugging = true
 
 func main() {
 	args := os.Args
@@ -34,6 +35,9 @@ func main() {
 	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
-		debug.Println(stats.stats)
+		users := SortedUsers(stats)
+		for _, user := range users {
+			debug.Println(user)
+		}
 	}
 }

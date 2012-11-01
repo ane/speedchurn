@@ -2,8 +2,8 @@ package main
 
 import (
 	"runtime"
-	"time"
 	"sort"
+	"time"
 )
 
 // Churn processes a log file first by chunking it into parts and then mapreducing
@@ -30,7 +30,9 @@ func Churn(file string, ch chan ChanStats) {
 // smart to use minDist = 1.
 func MergeSimilarNicks(r RelevantStats, minDist int) map[string]UserStats {
 	nicks := []string{}
-	for n, _ := range r.Users { nicks = append(nicks, n) }
+	for n, _ := range r.Users {
+		nicks = append(nicks, n)
+	}
 	newStats := r.Users
 
 	distances := make(map[string]map[string]int)
@@ -39,7 +41,9 @@ func MergeSimilarNicks(r RelevantStats, minDist int) map[string]UserStats {
 	for _, n1 := range nicks {
 		distances[n1] = make(map[string]int)
 		for _, n2 := range nicks {
-			if n1 == n2 { continue; }
+			if n1 == n2 {
+				continue
+			}
 
 			dist := Levenshtein(n1, n2)
 			distances[n1][n2] = dist
@@ -49,7 +53,9 @@ func MergeSimilarNicks(r RelevantStats, minDist int) map[string]UserStats {
 		}
 	}
 	nix := []string{}
-	for n, _ := range toCopy { nix = append(nix, n) }
+	for n, _ := range toCopy {
+		nix = append(nix, n)
+	}
 	sort.Strings(nix)
 
 	for i := 0; i < len(nix); i++ {
@@ -85,20 +91,24 @@ func Levenshtein(a, b string) int {
 	aL := len(a)
 	bL := len(b)
 	if aL == 0 && bL > 0 {
-		return bL;
+		return bL
 	} else if bL == 0 && aL > 0 {
 		return aL
 	}
 
-	if aL < bL { return Levenshtein(b, a) }
+	if aL < bL {
+		return Levenshtein(b, a)
+	}
 
-	d := make([]int, bL + 1)
-	for i, _ := range d { d[i] = i }
+	d := make([]int, bL+1)
+	for i, _ := range d {
+		d[i] = i
+	}
 
 	for i, xc := range a {
 		x := []int{i + 1}
 		for j, yc := range b {
-			add := d[j + 1] + 1
+			add := d[j+1] + 1
 			rem := x[j] + 1
 			swp := d[j]
 			if xc != yc {
@@ -108,5 +118,5 @@ func Levenshtein(a, b string) int {
 		}
 		d = x
 	}
-	return d[len(d) - 1]
+	return d[len(d)-1]
 }
