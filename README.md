@@ -6,9 +6,13 @@ speedchurn - Rapid IRC Statistics &amp; Analysis
 Current status
 --------------
 
- * nothing is calculated, nothing is processed
  * only irssi format is supported
- * the codebase is only a day old
+ * the following statistics are calculated:
+   * lines and words for each user
+   * topic changes
+   * number of elapsed days
+   * *more to come...*
+ * template engine is being worked on
 
 Installation
 ------------
@@ -36,7 +40,8 @@ and is the ideological successor to that project.
 Roadmap & goals
 ---------------
 
-  * Visualization using interactive charts
+  * Visualization using interactive charts (d3.js)
+  * Templates styled with Bootstrap
   * Focus on pertinent data over impertinent data
   * 86 bazillion charts with 96.7% more wub wub
   * **Speed**.
