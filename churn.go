@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 	"time"
-	"fmt"
 )
 
 // Churn processes a log file first by chunking it into parts and then mapreducing

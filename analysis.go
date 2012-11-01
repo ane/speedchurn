@@ -21,7 +21,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 	buffer := bytes.NewBuffer(chunk)
 	impStats := ImpertinentStats{}
 	relStats := RelevantStats{}
-	relStats.Users = make(map [string]UserStats)
+	relStats.Users = make(map[string]UserStats)
 	for {
 		line, err := buffer.ReadBytes('\n')
 		if err != nil && err == io.EOF {
@@ -54,7 +54,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 }
 
 func Match(line []byte, m Matcher) interface{} {
-	methods := []func(Matcher, []byte) (bool, interface{}) { Matcher.Day, Matcher.Topic, Matcher.Regular }
+	methods := []func(Matcher, []byte) (bool, interface{}){Matcher.Day, Matcher.Topic, Matcher.Regular}
 	// multiplex the matching to all matcher methods
 	for i := 0; i < len(methods); i++ {
 		match, res := methods[i](m, line)
@@ -80,4 +80,3 @@ func GetChunks(c ChanStats) chan interface{} {
 func GetFunctionName(i interface{}) string {
 	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
 }
-

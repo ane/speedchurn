@@ -17,7 +17,6 @@ var modeChars string = "@\\s\\+%"
 var channel string = "([!&#\\+]+[" + chanChars + "]+)"
 var nickName string = "([" + nickChars + "]+)"
 
-
 func (im IrssiMatcher) Day(line []byte) (bool, interface{}) {
 	match, _ := regexp.Match("^--- Day changed", line)
 	return match, match

@@ -11,14 +11,14 @@ type Topic struct {
 }
 
 type Timestamp struct {
-	Hour int
+	Hour   int
 	Minute int
 }
 
 type Normal struct {
 	Timestamp Timestamp
-	Nick string
-	Content string
+	Nick      string
+	Content   string
 }
 
 type Matcher interface {

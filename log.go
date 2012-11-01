@@ -4,8 +4,8 @@
 package main
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 type ImpertinentStats struct {
@@ -30,7 +30,7 @@ type HourStats map[int]int
 
 type StatsChunk struct {
 	impertinent ImpertinentStats
-	relevant RelevantStats
+	relevant    RelevantStats
 }
 
 type ChanStats struct {
@@ -43,7 +43,9 @@ type ChanStats struct {
 }
 
 func JoinIntMap(a map[int]int, b map[int]int) {
-	if len(a) != len(b) { return }
+	if len(a) != len(b) {
+		return
+	}
 	for k, v := range a {
 		val, present := b[k]
 		if present {
@@ -52,8 +54,12 @@ func JoinIntMap(a map[int]int, b map[int]int) {
 	}
 }
 func JoinUserStats(a map[string]UserStats, b map[string]UserStats) map[string]UserStats {
-	if len(a) == 0 { return b }
-	if len(b) == 0 { return a }
+	if len(a) == 0 {
+		return b
+	}
+	if len(b) == 0 {
+		return a
+	}
 	for k, v := range b {
 		val, present := a[k]
 		if present {
