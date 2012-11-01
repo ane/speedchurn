@@ -54,10 +54,10 @@ func MapChunk(source interface{}, output chan interface{}) {
 }
 
 func Match(line []byte, m Matcher) interface{} {
-	methods := []func([]byte, Matcher) (bool, interface{}){MatchDayChange, MatchTopicChange, MatchNormal}
+	methods := []func(Matcher, []byte) (bool, interface{}) { Matcher.Day, Matcher.Topic, Matcher.Regular }
 	// multiplex the matching to all matcher methods
 	for i := 0; i < len(methods); i++ {
-		match, res := methods[i](line, m)
+		match, res := methods[i](m, line)
 		if match {
 			return res
 		}

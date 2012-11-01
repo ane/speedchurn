@@ -18,12 +18,12 @@ var channel string = "([!&#\\+]+[" + chanChars + "]+)"
 var nickName string = "([" + nickChars + "]+)"
 
 
-func (im IrssiMatcher) Day(line []byte) (bool, bool) {
+func (im IrssiMatcher) Day(line []byte) (bool, interface{}) {
 	match, _ := regexp.Match("^--- Day changed", line)
 	return match, match
 }
 
-func (im IrssiMatcher) Topic(line []byte) (bool, Topic) {
+func (im IrssiMatcher) Topic(line []byte) (bool, interface{}) {
 	expr := timeStampPattern + sepPattern + "(" + nickName + ")"
 	expr += " changed the topic of " + channel + " to: (.*)"
 	rel, _ := regexp.Compile(expr)
@@ -36,7 +36,7 @@ func (im IrssiMatcher) Topic(line []byte) (bool, Topic) {
 	return result != nil, topic
 }
 
-func (im IrssiMatcher) Regular(line []byte) (bool, Normal) {
+func (im IrssiMatcher) Regular(line []byte) (bool, interface{}) {
 	expr := timeStampPattern + "\\s"
 	expr += "<[" + modeChars + "]+"
 	expr += nickName + ">\\s"

@@ -22,21 +22,8 @@ type Normal struct {
 }
 
 type Matcher interface {
-	Day([]byte) (bool, bool)
+	Day([]byte) (bool, interface{})
 	Kick([]byte) Kick
-	Topic([]byte) (bool, Topic)
-	Regular([]byte) (bool, Normal)
-}
-
-func MatchDayChange(line []byte, m Matcher) (bool, interface{}) {
-	match, _ := m.Day(line)
-	return match, match
-}
-
-func MatchTopicChange(line []byte, m Matcher) (bool, interface{}) {
-	return m.Topic(line)
-}
-
-func MatchNormal(line []byte, m Matcher) (bool, interface{}) {
-	return m.Regular(line)
+	Topic([]byte) (bool, interface{})
+	Regular([]byte) (bool, interface{})
 }
