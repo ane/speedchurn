@@ -4,19 +4,21 @@ import (
 	"runtime"
 	"sort"
 	"time"
+	"strings"
 )
 
 // Churn processes a log file first by chunking it into parts and then mapreducing
 // all of these simultaneously.
 func Churn(file string, ch chan ChanStats) {
-	specs := LineChunks(4, file)
+	cores := runtime.GOMAXPROCS(0)
+	specs := LineChunks(4*cores, file)
 	chunks := LoadChunks(file, specs)
 
 	c := ChanStats{channelName: file, chunks: chunks, matcher: new(IrssiMatcher)}
 
 	t := time.Now()
-	debug.Printf("Using %d cores (%d available)\n", runtime.GOMAXPROCS(0), runtime.NumCPU())
-	c.stats = MapReduce(MapChunk, ReduceChunks, GetChunks(c), 4).(StatsChunk)
+	debug.Printf("Using %d cores (%d available)\n", cores, runtime.NumCPU())
+	c.stats = MapReduce(MapChunk, ReduceChunks, GetChunks(c), 4*cores).(StatsChunk)
 	c.stats.relevant.Users = MergeSimilarNicks(c.stats.relevant, 1)
 	dur := time.Since(t)
 	debug.Println(file, "complete in", dur)
@@ -45,7 +47,7 @@ func MergeSimilarNicks(r RelevantStats, minDist int) map[string]UserStats {
 				continue
 			}
 
-			dist := Levenshtein(n1, n2)
+			dist := Levenshtein(strings.ToLower(n1), strings.ToLower(n2))
 			distances[n1][n2] = dist
 			if dist <= minDist {
 				toCopy[n1] = append(toCopy[n1], n2)
