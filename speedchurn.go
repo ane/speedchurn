@@ -39,5 +39,7 @@ func main() {
 		for _, user := range users {
 			debug.Println(user)
 		}
+		debug.Println("Writing output...")
+		Output(Produce(stats))
 	}
 }

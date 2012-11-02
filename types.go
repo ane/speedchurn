@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type ImpertinentStats struct {
@@ -28,6 +29,12 @@ type UserStats struct {
 
 type HourStats map[int]int
 
+type Performance struct {
+	Duration time.Duration
+	Cores int
+	Threads int
+}
+
 type StatsChunk struct {
 	impertinent ImpertinentStats
 	relevant    RelevantStats
@@ -37,6 +44,7 @@ type ChanStats struct {
 	channelName string
 	chunks      []Chunk
 	stats       StatsChunk
+	performance Performance
 	matcher     interface {
 		Matcher
 	}

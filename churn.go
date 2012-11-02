@@ -22,6 +22,7 @@ func Churn(file string, ch chan ChanStats) {
 	c.stats.relevant.Users = MergeSimilarNicks(c.stats.relevant, 1)
 	dur := time.Since(t)
 	debug.Println(file, "complete in", dur)
+	c.performance = Performance{Duration: dur, Cores: cores, Threads: 4*cores}
 
 	ch <- c
 	wg.Done()

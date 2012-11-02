@@ -1,3 +1,5 @@
+// The format module is the "formatting" part of the pipeline, i.e., the part
+// where statistics are processed to provide values, e.g., daily mean lines and such.
 package main
 
 import (
@@ -24,6 +26,7 @@ func (a Users) Len() int { return len(a) }
 
 func (a Users) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 
+
 func SortedUsers(c ChanStats) Users {
 	users := c.stats.relevant.Users
 	var stats Users
@@ -33,3 +36,4 @@ func SortedUsers(c ChanStats) Users {
 	sort.Sort(stats)
 	return stats
 }
+
