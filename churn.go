@@ -4,7 +4,9 @@ import (
 	"runtime"
 	"sort"
 	"time"
+	"math"
 	"strings"
+	"os"
 )
 
 // Churn processes a log file first by chunking it into parts and then mapreducing
@@ -22,6 +24,12 @@ func Churn(file string, ch chan ChanStats) {
 	c.stats.relevant.Users = MergeSimilarNicks(c.stats.relevant, 1)
 	dur := time.Since(t)
 	debug.Println(file, "complete in", dur)
+
+	// calculate processing speed
+	info, err := os.Stat(file)
+	if err != nil { panic(err); }
+	c.speed = math.Floor(float64((info.Size() / int64(1024))) / float64(dur.Seconds()))
+
 	c.performance = Performance{Duration: dur, Cores: cores, Threads: 4*cores}
 
 	ch <- c

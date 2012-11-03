@@ -16,6 +16,7 @@ type TemplateStats struct {
 	TotalLines int
 	TotalWords int
 	Events int
+	Speed float64
 }
 
 
@@ -33,6 +34,7 @@ func Produce(c ChanStats) TemplateStats {
 		TotalUsers: len(c.stats.relevant.Users),
 		Events: c.stats.impertinent.totalEvents,
 		TotalLines: l,
+		Speed: c.speed,
 		TotalWords: w,
 	}
 }

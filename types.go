@@ -46,6 +46,7 @@ type ChanStats struct {
 	chunks      []Chunk
 	stats       StatsChunk
 	performance Performance
+	speed       float64
 	matcher     interface {
 		Matcher
 	}
