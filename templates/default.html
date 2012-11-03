@@ -37,6 +37,9 @@
 		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="bootstrap/ico/apple-touch-icon-114-precomposed.png">
 		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="bootstrap/ico/apple-touch-icon-72-precomposed.png">
 		<link rel="apple-touch-icon-precomposed" href="bootstrap/ico/apple-touch-icon-57-precomposed.png">
+		<script>
+			var chan = {{.Name}}
+		</script>
 	</head>
 
 	<body>
@@ -45,7 +48,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="brand">{{.Name}} statistics</a>
+					<a class="brand">#{{.Name}} statistics</a>
 					<ul class="nav">
 						<li class="active">
 						<a href="#">Home</a>
@@ -60,17 +63,55 @@
 
 		<div class="container">
 			<div class="page-header">
-				<h1>Statistics for {{.Name}}</h1>
+				<h1>Statistics for #{{.Name}}</h1>
 			</div>
 			<div class="row">
-				<div class="span4">
-					<p class="lead">The following statistics were tracked during a {{.Days}} day period.</p>
-					<p>During this period we saw <strong>X</strong> unique users with a total activity of <strong>Y</strong>
-					different activity events.</p>
-					<p>Of these events, a total of <strong>Z</strong> and <strong>α</strong> words were spoken.</p>
+				<div class="span12">
+				<h5>The Top 15</h5>
 				</div>
-				<div class="span8">
-          <p>CHARTS! CHARTS! CHARTS!</p>
+			</div>
+			<div class="row">
+				<div class="span7">
+					<table class="table table-hover table-striped table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th class="span1">#</th>
+								<th>Nick</th>
+								<th>Lines</th>
+								<th>Words</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{range $idx, $u := .Users}}
+							<tr>
+								<td>
+									{{$u.Rank}}
+								</td>
+								<td>
+									<b>{{$u.Nick}}</b>
+								</td>
+								<td>
+									{{$u.Stats.Lines}}
+								</td>
+								<td>
+									{{$u.Stats.Words}}
+								</td>
+							</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				<div class="span5" id="top15">
+				</div>
+			</div>
+			<div class="row">
+				<div class="span6">
+					<p class="lead">These statistics were tracked during a {{.Days}} day period.</p>
+					<p>During this period we saw <strong>{{.TotalUsers}}</strong> unique users with a total activity of <strong>{{.Events}}</strong>
+					different activity events.</p>
+					<p>Of these events, <strong>{{.TotalLines}}</strong> were spoken lines, amounting to a total of <strong>{{.TotalWords}}</strong> words.</p>
+				</div>
+				<div class="span6">
 				</div>
 			</div>
 			<hr>
@@ -79,12 +120,11 @@
 			</div>
 			<div class="row">
 				<div class="span4">
-					<h3>Daily activity</h3>
 					<p class="lead">Most channel activity occurred between <strong>6:00</strong> and <strong>12:00</strong>.</p>
 					<p>The second most active day quarter was <strong>12:00-18:00</strong>.</p>
 				</div>
 				<div class="span8">
-          <p><b>87 BAZILLION CHARTS WITH 96.5% MORE WUB WUB</b></p>
+					<p><b>87 BAZILLION CHARTS WITH 96.5% MORE WUB WUB</b></p>
 				</div>
 			</div>
 			<hr/>
@@ -93,13 +133,12 @@
 			</div>
 			<div class="row">
 				<div class="span4">
-					<h3>Characters vs. number of lines</h3>
 					<p class="lead">On average, people wrote <strong>X</strong> characters per line on <strong>Y</strong> lines.</p>
 					<small>The median characters per line was <strong>A</strong> characters and the median
-					lines spoken was <strong>B</strong>.</small>
+						lines spoken was <strong>B</strong>.</small>
 				</div>
 				<div class="span8">
-          <p>I AM ALL THAT IS STATISTICALLY SIGNIFICANT!</p>
+					<p>I AM ALL THAT IS STATISTICALLY SIGNIFICANT!</p>
 				</div>
 			</div>
 		</div>
@@ -116,19 +155,10 @@
 		<!-- Le javascript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="bootsrap/js/jquery.js"></script>
-		<script src="bootsrap/js/bootstrap-transition.js"></script>
-		<script src="bootsrap/js/bootstrap-alert.js"></script>
-		<script src="bootsrap/js/bootstrap-modal.js"></script>
-		<script src="bootsrap/js/bootstrap-dropdown.js"></script>
-		<script src="bootsrap/js/bootstrap-scrollspy.js"></script>
-		<script src="bootsrap/js/bootstrap-tab.js"></script>
-		<script src="bootsrap/js/bootstrap-tooltip.js"></script>
-		<script src="bootsrap/js/bootstrap-popover.js"></script>
-		<script src="bootsrap/js/bootstrap-button.js"></script>
-		<script src="bootsrap/js/bootstrap-collapse.js"></script>
-		<script src="bootsrap/js/bootstrap-carousel.js"></script>
-		<script src="bootsrap/js/bootstrap-typeahead.js"></script>
+		<script src="bootstrap/js/jquery.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script src="d3.v2.min.js"></script>
+		<script src="top15.js"></script>
 
 	</body>
 </html>

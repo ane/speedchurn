@@ -16,6 +16,7 @@ type ImpertinentStats struct {
 	quits        int
 	joins        int
 	parts        int
+	totalEvents      int
 }
 
 type RelevantStats struct {
@@ -23,8 +24,8 @@ type RelevantStats struct {
 	Hours HourStats
 }
 type UserStats struct {
-	Lines int
-	Words int
+	Lines int `json:"lines"`
+	Words int `json:"words"`
 }
 
 type HourStats map[int]int
@@ -93,6 +94,7 @@ func (a *ImpertinentStats) Union(b ImpertinentStats) {
 	a.quits += b.quits
 	a.joins += b.joins
 	a.parts += b.parts
+	a.totalEvents += b.totalEvents
 }
 
 func (a *UserStats) Union(b UserStats) {

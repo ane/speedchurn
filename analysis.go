@@ -27,6 +27,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 		if err != nil && err == io.EOF {
 			break
 		} else {
+			impStats.totalEvents++
 			what := Match(line, matcher)
 			switch what.(type) {
 			default:

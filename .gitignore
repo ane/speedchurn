@@ -24,5 +24,7 @@ _testmain.go
 # risa specific stuff
 # logs
 *.log
+output/*.html
+output/data/*.json
 # executable
 speedchurn

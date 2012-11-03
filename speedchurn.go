@@ -35,7 +35,7 @@ func main() {
 	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
-		users := SortedUsers(stats)
+		users := SortedUsers(stats, 15)
 		for _, user := range users {
 			debug.Println(user)
 		}
