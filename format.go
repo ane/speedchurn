@@ -8,8 +8,8 @@ import (
 )
 
 type User struct {
-	Nick string `json:"nick"`
-	Rank int
+	Nick  string `json:"nick"`
+	Rank  int
 	Stats UserStats `json:"stats"`
 }
 
@@ -47,4 +47,3 @@ func SortedUsers(c ChanStats, limit int) Users {
 	sort.Sort(stats)
 	return Take(15, stats)
 }
-

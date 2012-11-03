@@ -1,12 +1,12 @@
 package main
 
 import (
+	"math"
+	"os"
 	"runtime"
 	"sort"
-	"time"
-	"math"
 	"strings"
-	"os"
+	"time"
 )
 
 // Churn processes a log file first by chunking it into parts and then mapreducing
@@ -27,10 +27,12 @@ func Churn(file string, ch chan ChanStats) {
 
 	// calculate processing speed
 	info, err := os.Stat(file)
-	if err != nil { panic(err); }
+	if err != nil {
+		panic(err)
+	}
 	c.speed = math.Floor(float64((info.Size() / int64(1024))) / float64(dur.Seconds()))
 
-	c.performance = Performance{Duration: dur, Cores: cores, Threads: 4*cores}
+	c.performance = Performance{Duration: dur, Cores: cores, Threads: 4 * cores}
 
 	ch <- c
 	wg.Done()

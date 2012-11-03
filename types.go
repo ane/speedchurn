@@ -16,7 +16,7 @@ type ImpertinentStats struct {
 	quits        int
 	joins        int
 	parts        int
-	totalEvents      int
+	totalEvents  int
 }
 
 type RelevantStats struct {
@@ -32,8 +32,8 @@ type HourStats map[int]int
 
 type Performance struct {
 	Duration time.Duration
-	Cores int
-	Threads int
+	Cores    int
+	Threads  int
 }
 
 type StatsChunk struct {
