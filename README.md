@@ -6,13 +6,12 @@ speedchurn - Rapid IRC Statistics &amp; Analysis
 Current status
 --------------
 
- * only irssi format is supported
+ * irssi format is supported
+ * templates work
  * the following statistics are calculated:
    * lines and words for each user
    * topic changes
    * number of elapsed days
-   * *more to come...*
- * template engine is being worked on
 
 Installation
 ------------
@@ -37,11 +36,12 @@ modern software design principles, e.g., concurrency, is called for.
 speedchurn borrows a lot of principles from ane/hisg (with regards to concurrency and speed)
 and is the ideological successor to that project.
 
-Roadmap & goals
+Feature Roadmap
 ---------------
 
-  * Visualization using interactive charts (d3.js)
-  * Templates styled with Bootstrap
+  * Achievements
+  * Automatic FTP/SCP-based deployment of the pages
+  * Charts produced using D3.js
   * Focus on pertinent data over impertinent data
   * 86 bazillion charts with 96.7% more wub wub
   * **Speed**.
