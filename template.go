@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"strings"
+	"strconv"
 )
 
 type TemplateStats struct {
@@ -17,6 +18,7 @@ type TemplateStats struct {
 	TotalWords  int
 	Events      int
 	Speed       float64
+	Daily       map[int]int
 }
 
 func Produce(c ChanStats) TemplateStats {
@@ -33,6 +35,7 @@ func Produce(c ChanStats) TemplateStats {
 		TotalUsers:  len(c.stats.relevant.Users),
 		Events:      c.stats.impertinent.totalEvents,
 		TotalLines:  l,
+		Daily:		 c.stats.daily.Lines,
 		Speed:       c.speed,
 		TotalWords:  w,
 	}
@@ -52,13 +55,32 @@ func WriteData(t TemplateStats) {
 	dataDir := "output/data/"
 
 	// write top15
-	top15 := dataDir + t.Name + "_top15.json"
-	f, err := os.Create(top15)
+	path := dataDir + t.Name
+	Top15(path + "_top15.json", t.Users)
+	DailyActivity(path + "_daily_activity.json", t.Daily)
+}
+
+func Top15(path string, u Users) {
+	WriteJSON(path, u)
+}
+
+func DailyActivity(path string, d map[int]int) {
+	conv := make(map[string]int)
+	for k, v := range(d) {
+		conv[strconv.Itoa(k)] = v
+	}
+	WriteJSON(path, conv)
+}
+
+func WriteJSON(path string, data interface{}) {
+	// write top15
+	f, err := os.Create(path)
 	if err != nil {
 		panic(err)
 	}
+	// write daily
 	defer f.Close()
-	d, err := json.Marshal(t.Users)
+	d, err := json.Marshal(data)
 	f.Write(d)
 }
 

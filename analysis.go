@@ -18,10 +18,12 @@ func ReduceChunks(source chan interface{}, output chan interface{}) {
 
 func MapChunk(source interface{}, output chan interface{}) {
 	chunk := source.(Chunk)
-	buffer := bytes.NewBuffer(chunk)
+	buffer := bytes.NewBuffer(chunk.Data)
 	impStats := ImpertinentStats{}
 	relStats := RelevantStats{}
+	dayStats := DailyStats{Offset: chunk.Order, Lines: make(map[int]int)}
 	relStats.Users = make(map[string]UserStats)
+	dayCounter := 0
 	for {
 		line, err := buffer.ReadBytes('\n')
 		if err != nil && err == io.EOF {
@@ -34,9 +36,20 @@ func MapChunk(source interface{}, output chan interface{}) {
 				//fmt.Println("type is %T", typ)
 			case bool:
 				impStats.dayChanges += 1
+				dayCounter++
+
 			case Topic:
 				impStats.topicChanges += 1
+
 			case Normal:
+				dailyLines, ex := dayStats.Lines[dayCounter]
+				if ex {
+					dailyLines++
+					dayStats.Lines[dayCounter] = dailyLines
+				} else {
+					dayStats.Lines[dayCounter] = 1
+				}
+
 				w := what.(Normal)
 				v, pres := relStats.Users[w.Nick]
 				wordCount := len(strings.Split(w.Content, " "))
@@ -51,7 +64,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 
 		}
 	}
-	output <- StatsChunk{impStats, relStats}
+	output <- StatsChunk{impStats, relStats, dayStats}
 }
 
 func Match(line []byte, m Matcher) interface{} {

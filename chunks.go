@@ -10,7 +10,10 @@ import (
 	"os"
 )
 
-type Chunk []byte
+type Chunk struct {
+	Data []byte
+	Order int
+}
 
 type ChunkSpec struct {
 	offset int64
@@ -77,7 +80,7 @@ func LoadChunks(file string, specs []ChunkSpec) []Chunk {
 			panic("error reading chunk " + string(i))
 		}
 
-		chunks[i] = chunkbuf
+		chunks[i] = Chunk{Data: chunkbuf, Order: i}
 	}
 	return chunks
 }
