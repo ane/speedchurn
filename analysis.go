@@ -64,7 +64,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 
 		}
 	}
-	output <- StatsChunk{impStats, relStats, dayStats}
+	output <- StatsChunk{impStats, relStats, dayStats, nil}
 }
 
 func Match(line []byte, m Matcher) interface{} {

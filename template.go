@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"os"
 	"strings"
-	"strconv"
 )
 
 type TemplateStats struct {
@@ -18,7 +17,7 @@ type TemplateStats struct {
 	TotalWords  int
 	Events      int
 	Speed       float64
-	Daily       map[int]int
+	Daily       []int
 }
 
 func Produce(c ChanStats) TemplateStats {
@@ -35,7 +34,7 @@ func Produce(c ChanStats) TemplateStats {
 		TotalUsers:  len(c.stats.relevant.Users),
 		Events:      c.stats.impertinent.totalEvents,
 		TotalLines:  l,
-		Daily:		 c.stats.daily.Lines,
+		Daily:		 c.stats.daily,
 		Speed:       c.speed,
 		TotalWords:  w,
 	}
@@ -64,10 +63,14 @@ func Top15(path string, u Users) {
 	WriteJSON(path, u)
 }
 
-func DailyActivity(path string, d map[int]int) {
-	conv := make(map[string]int)
-	for k, v := range(d) {
-		conv[strconv.Itoa(k)] = v
+func DailyActivity(path string, d []int) {
+	type Day struct {
+		Order int `json:"order"`
+		Lines int `json:"lines"`
+	}
+	var conv []Day
+	for i := 0; i < len(d); i++ {
+		conv = append(conv, Day{i, d[i]})
 	}
 	WriteJSON(path, conv)
 }
@@ -81,6 +84,9 @@ func WriteJSON(path string, data interface{}) {
 	// write daily
 	defer f.Close()
 	d, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
 	f.Write(d)
 }
 

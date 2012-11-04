@@ -21,8 +21,16 @@
 				border-top: 1px solid #e5e5e5;
 				background-color: #f5f5f5;
 			}
+		.axis path,
+		.axis line {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		}
 
-
+		.area {
+		  fill: steelblue;
+		}
 		</style>
 		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -101,7 +109,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="span5" id="top15">
+				<div class="span5" id="top15" style="height: 400px;">
 				</div>
 			</div>
 			<div class="row">
@@ -117,6 +125,14 @@
 			<hr>
 			<div class="page-header">
 				<h2>Activity Metrics <small>When were the users most active?</small></h2>
+			</div>
+			<div class="row">
+				<div class="span12">
+				<h5>Total Activity History</h5>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12" id="daily"> </div> 
 			</div>
 			<div class="row">
 				<div class="span4">
@@ -157,8 +173,9 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="bootstrap/js/jquery.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
-		<script src="d3.v2.min.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script src="top15.js"></script>
+		<script src="daily.js"></script>
 
 	</body>
 </html>

@@ -39,6 +39,10 @@ func main() {
 		for _, user := range users {
 			debug.Println(user)
 		}
+		daily := stats.stats.daily
+		for i := 0; i < len(daily); i++ {
+			debug.Printf("%dth day: %d lines", i, daily[i])
+		}
 		debug.Println("Writing output...")
 		Output(Produce(stats))
 	}

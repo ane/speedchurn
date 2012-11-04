@@ -45,7 +45,8 @@ type Performance struct {
 type StatsChunk struct {
 	impertinent ImpertinentStats
 	relevant    RelevantStats
-	daily       DailyStats
+	rawDaily    DailyStats
+	daily       []int
 }
 
 type ChanStats struct {
@@ -114,21 +115,15 @@ func (a *StatsChunk) Union(b StatsChunk) {
 	a.impertinent.Union(b.impertinent)
 	a.relevant.Union(b.relevant)
 	// join daily stats
-	offset := 0
-	firstChunk := false
-	if a.daily.Lines == nil {
-		a.daily.Lines = b.daily.Lines
-		firstChunk = true
-	} else {
-		offset = len(a.daily.Lines);
-		// we're continuing, merge
-		if !firstChunk {
-			offset = len(a.daily.Lines) - 1
-			a.daily.Lines[offset] += b.daily.Lines[0]
+	if a.rawDaily.Lines == nil {
+		a.rawDaily.Lines = b.rawDaily.Lines
+		for i := 0; i < len(a.rawDaily.Lines); i++ {
+			a.daily = append(a.daily, a.rawDaily.Lines[i])
 		}
-		// append
-		for i := 1; i < len(b.daily.Lines); i++ {
-			a.daily.Lines[offset + i] = b.daily.Lines[i]
+	} else {
+		for i := 0; i < len(b.rawDaily.Lines); i++ {
+			if (i == 0) { continue }
+			a.daily = append(a.daily, b.rawDaily.Lines[i])
 		}
 	}
 }
