@@ -18,8 +18,13 @@ var channel string = "([!&#\\+]+[" + chanChars + "]+)"
 var nickName string = "([" + nickChars + "]+)"
 
 func (im IrssiMatcher) Day(line []byte) (bool, interface{}) {
-	match, _ := regexp.Match("^--- Day changed", line)
-	return match, match
+	re, _ := regexp.Compile("^--- Day changed \\w+ \\w+ (.*)")
+	result := re.FindStringSubmatch(string(line))
+	day := ""
+	if result != nil {
+		day = result[1]
+	}
+	return result != nil, day
 }
 
 func (im IrssiMatcher) Topic(line []byte) (bool, interface{}) {

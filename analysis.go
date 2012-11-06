@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"time"
 )
 
 func ReduceChunks(source chan interface{}, output chan interface{}) {
@@ -34,7 +35,12 @@ func MapChunk(source interface{}, output chan interface{}) {
 			switch what.(type) {
 			default:
 				//fmt.Println("type is %T", typ)
-			case bool:
+			case string:
+				day := what.(string)
+				debug.Println(day)
+				blah, err := time.Parse("2 2006", day)
+				if err != nil { panic(err); }
+				debug.Println(blah)
 				impStats.dayChanges += 1
 				dayCounter++
 
