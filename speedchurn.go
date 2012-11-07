@@ -4,10 +4,10 @@
 package main
 
 import (
+	"flag"
 	"os"
 	"runtime"
 	"sync"
-	"flag"
 )
 
 var wg sync.WaitGroup

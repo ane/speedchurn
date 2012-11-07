@@ -11,7 +11,7 @@ import (
 )
 
 type Chunk struct {
-	Data []byte
+	Data  []byte
 	Order int
 }
 

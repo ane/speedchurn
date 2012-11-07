@@ -2,10 +2,10 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"reflect"
 	"runtime"
-	"fmt"
 	"strings"
 	"time"
 )
@@ -57,7 +57,9 @@ func MapChunk(source interface{}, output chan interface{}) {
 				// *both* must differ (i.e. been translated)
 				if transDay != da && transMonth != month {
 					date, err := time.Parse("Mon Jan 2 2006", toParse)
-					if err != nil { panic(err); }
+					if err != nil {
+						panic(err)
+					}
 					dayStats = append(dayStats, Day{Lines: 1, Date: date})
 				} else if transDay == da && transMonth == month {
 					// try parsing it anyway, maybe it was in english?
@@ -78,7 +80,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 
 			case Normal:
 				// increment day
-				if len(dayStats) - 1 <= dayCounter {
+				if len(dayStats)-1 <= dayCounter {
 					day := dayStats[dayCounter]
 					day.Lines++
 					dayStats[dayCounter] = day

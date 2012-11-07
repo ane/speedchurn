@@ -30,7 +30,7 @@ type UserStats struct {
 }
 
 type Day struct {
-	Lines int `json:"lines"`
+	Lines int       `json:"lines"`
 	Date  time.Time `json:"date"`
 }
 
@@ -47,7 +47,7 @@ type Performance struct {
 type StatsChunk struct {
 	impertinent ImpertinentStats
 	relevant    RelevantStats
-	daily		DailyStats
+	daily       DailyStats
 }
 
 type ChanStats struct {

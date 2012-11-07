@@ -60,8 +60,8 @@ func WriteData(t TemplateStats) {
 
 	// write top15
 	path := dataDir + t.Name
-	Top15(path + "_top15.json", t.Users)
-	DailyActivity(path + "_daily_activity.json", t.Daily)
+	Top15(path+"_top15.json", t.Users)
+	DailyActivity(path+"_daily_activity.json", t.Daily)
 }
 
 func Top15(path string, u Users) {
