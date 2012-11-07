@@ -81,7 +81,7 @@ func MergeSimilarNicks(r RelevantStats, minDist int) map[string]UserStats {
 			// remove
 			delete(toCopy, n)
 			delete(newStats, n)
-			debug.Println(nix[i], "merged with", n)
+			//debug.Println(nix[i], "merged with", n)
 		}
 	}
 	return newStats

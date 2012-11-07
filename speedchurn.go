@@ -19,9 +19,6 @@ const debug debugging = true
 func main() {
 	args := os.Args
 
-	trans := ShortDateMonthTranslator("fi_FI")
-	debug.Println(trans("Su Pyl"))
-
 	if len(args) < 2 {
 		panic("Usage: speedchurn <log1> <log2> ... <logN>")
 	}
@@ -38,16 +35,6 @@ func main() {
 	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
-		users := SortedUsers(stats, 15)
-		for _, user := range users {
-			debug.Println(user)
-		}
-		daily := stats.stats.daily
-		daily[0].Date = daily[1].Date.AddDate(0,0,-1)
-
-		for i := 0; i < len(daily); i++ {
-			debug.Printf("%dth day %s: %d lines", i, daily[i].Date, daily[i].Lines)
-		}
 		debug.Println("Writing output...")
 		Output(Produce(stats))
 	}

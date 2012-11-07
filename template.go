@@ -81,6 +81,7 @@ func WriteJSON(path string, data interface{}) {
 		panic(err)
 	}
 	f.Write(d)
+	debug.Println("\twrote", path)
 }
 
 func Output(t TemplateStats) {
@@ -92,6 +93,7 @@ func Output(t TemplateStats) {
 	defer file.Close()
 
 	WriteData(t)
+	debug.Println("\twrote", fileName)
 
 	tpl, err := template.ParseFiles("templates/default.html")
 	tplErr := tpl.Execute(file, t)
