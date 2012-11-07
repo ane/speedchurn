@@ -25,6 +25,7 @@ func Produce(c ChanStats) TemplateStats {
 	var name string
 	name = parts[0]
 	l, w := LinesAndWords(c)
+	FixFirst(c.stats.daily)
 
 	return TemplateStats{
 		Name:        name,
@@ -34,7 +35,7 @@ func Produce(c ChanStats) TemplateStats {
 		TotalUsers:  len(c.stats.relevant.Users),
 		Events:      c.stats.impertinent.totalEvents,
 		TotalLines:  l,
-		Daily:		 c.stats.daily,
+		Daily:       c.stats.daily,
 		Speed:       c.speed,
 		TotalWords:  w,
 	}
@@ -48,6 +49,10 @@ func LinesAndWords(c ChanStats) (int, int) {
 		words += u.Words
 	}
 	return lines, words
+}
+
+func FixFirst(d DailyStats) {
+	d[0].Date = d[1].Date.AddDate(0, 0, -1)
 }
 
 func WriteData(t TemplateStats) {

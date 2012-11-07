@@ -27,7 +27,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 	relStats.Users = make(map[string]UserStats)
 	dayCounter := 0
 
-	translator := ShortDateMonthTranslator("fi_FI")
+	translator := ShortDateMonthTranslator(Locale)
 
 	for {
 		line, err := buffer.ReadBytes('\n')
@@ -52,14 +52,24 @@ func MapChunk(source interface{}, output chan interface{}) {
 
 				var transDay, transMonth string
 				fmt.Sscanf(translated, "%s %s", &transDay, &transMonth)
+				toParse := fmt.Sprintf("%s %s %s", translated, day[2], day[3])
 
 				// *both* must differ (i.e. been translated)
 				if transDay != da && transMonth != month {
-					toParse := fmt.Sprintf("%s %s %s", translated, day[2], day[3])
 					date, err := time.Parse("Mon Jan 2 2006", toParse)
 					if err != nil { panic(err); }
 					dayStats = append(dayStats, Day{Lines: 1, Date: date})
+				} else if transDay == da && transMonth == month {
+					// try parsing it anyway, maybe it was in english?
+					date, err := time.Parse("Mon Jan 2 2006", toParse)
+					// couldn't parse. whatever.
+					if err != nil {
+						dayStats = append(dayStats, Day{Lines: 1})
+					} else {
+						dayStats = append(dayStats, Day{Lines: 1, Date: date})
+					}
 				} else {
+					// no dice
 					dayStats = append(dayStats, Day{Lines: 1})
 				}
 
