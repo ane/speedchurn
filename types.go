@@ -29,10 +29,12 @@ type UserStats struct {
 	Words int `json:"words"`
 }
 
-type DailyStats struct {
-	Offset int
-	Lines map[int]int
+type Day struct {
+	Lines int `json:"lines"`
+	Date  time.Time `json:"date"`
 }
+
+type DailyStats []Day
 
 type HourStats map[int]int
 
@@ -45,8 +47,7 @@ type Performance struct {
 type StatsChunk struct {
 	impertinent ImpertinentStats
 	relevant    RelevantStats
-	rawDaily    DailyStats
-	daily       []int
+	daily		DailyStats
 }
 
 type ChanStats struct {
@@ -115,16 +116,11 @@ func (a *StatsChunk) Union(b StatsChunk) {
 	a.impertinent.Union(b.impertinent)
 	a.relevant.Union(b.relevant)
 	// join daily stats
-	if a.rawDaily.Lines == nil {
-		a.rawDaily.Lines = b.rawDaily.Lines
-		for i := 0; i < len(a.rawDaily.Lines); i++ {
-			a.daily = append(a.daily, a.rawDaily.Lines[i])
-		}
+	if len(a.daily) == 0 {
+		a.daily = b.daily
 	} else {
-		for i := 0; i < len(b.rawDaily.Lines); i++ {
-			if (i == 0) { continue }
-			a.daily = append(a.daily, b.rawDaily.Lines[i])
-		}
+		a.daily[len(a.daily)-1].Lines += b.daily[0].Lines
+		a.daily = append(a.daily, b.daily[1:]...)
 	}
 }
 

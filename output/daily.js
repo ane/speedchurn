@@ -10,18 +10,18 @@ function drawActivity() {
 	}).responseText;
 
 	var options = {
-		title: 'Daily activity',
-		width: 940,
-		chartArea: {'width': '80%', 'height': '80%'},
+		title: 'Daily activity (total number of lines per day)',
+		width: '100%',
+		chartArea: {'width': '85%', 'height': '80%'},
 		height: 400,
 	};
 
-	data.addColumn("number", "Day")
+	data.addColumn("date", "Date")
 	data.addColumn("number", "Lines")
 
 	var blob = eval(jsonData);
 	blob.forEach(function(e, idx, arr) {
-		data.addRow([e.order, e.lines]);
+		data.addRow([new Date(e.date), e.lines]);
 	})
 
 	var chart = new google.visualization.AreaChart(document.getElementById('daily'));

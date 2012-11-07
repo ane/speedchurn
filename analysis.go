@@ -5,6 +5,7 @@ import (
 	"io"
 	"reflect"
 	"runtime"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -22,9 +23,12 @@ func MapChunk(source interface{}, output chan interface{}) {
 	buffer := bytes.NewBuffer(chunk.Data)
 	impStats := ImpertinentStats{}
 	relStats := RelevantStats{}
-	dayStats := DailyStats{Offset: chunk.Order, Lines: make(map[int]int)}
+	dayStats := []Day{Day{}}
 	relStats.Users = make(map[string]UserStats)
 	dayCounter := 0
+
+	translator := ShortDateMonthTranslator("fi_FI")
+
 	for {
 		line, err := buffer.ReadBytes('\n')
 		if err != nil && err == io.EOF {
@@ -35,25 +39,39 @@ func MapChunk(source interface{}, output chan interface{}) {
 			switch what.(type) {
 			default:
 				//fmt.Println("type is %T", typ)
-			case string:
-				day := what.(string)
-				debug.Println(day)
-				blah, err := time.Parse("2 2006", day)
-				if err != nil { panic(err); }
-				debug.Println(blah)
+			case []string:
 				impStats.dayChanges += 1
 				dayCounter++
+
+				day := what.([]string)
+				da, month := day[0], day[1]
+
+				// translate first
+				translate := fmt.Sprintf("%s %s", da, month)
+				translated := translator(translate)
+
+				var transDay, transMonth string
+				fmt.Sscanf(translated, "%s %s", &transDay, &transMonth)
+
+				// *both* must differ (i.e. been translated)
+				if transDay != da && transMonth != month {
+					toParse := fmt.Sprintf("%s %s %s", translated, day[2], day[3])
+					date, err := time.Parse("Mon Jan 2 2006", toParse)
+					if err != nil { panic(err); }
+					dayStats = append(dayStats, Day{Lines: 1, Date: date})
+				} else {
+					dayStats = append(dayStats, Day{Lines: 1})
+				}
 
 			case Topic:
 				impStats.topicChanges += 1
 
 			case Normal:
-				dailyLines, ex := dayStats.Lines[dayCounter]
-				if ex {
-					dailyLines++
-					dayStats.Lines[dayCounter] = dailyLines
-				} else {
-					dayStats.Lines[dayCounter] = 1
+				// increment day
+				if len(dayStats) - 1 <= dayCounter {
+					day := dayStats[dayCounter]
+					day.Lines++
+					dayStats[dayCounter] = day
 				}
 
 				w := what.(Normal)
@@ -70,7 +88,7 @@ func MapChunk(source interface{}, output chan interface{}) {
 
 		}
 	}
-	output <- StatsChunk{impStats, relStats, dayStats, nil}
+	output <- StatsChunk{impStats, relStats, dayStats}
 }
 
 func Match(line []byte, m Matcher) interface{} {

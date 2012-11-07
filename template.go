@@ -17,7 +17,7 @@ type TemplateStats struct {
 	TotalWords  int
 	Events      int
 	Speed       float64
-	Daily       []int
+	Daily       DailyStats
 }
 
 func Produce(c ChanStats) TemplateStats {
@@ -63,16 +63,9 @@ func Top15(path string, u Users) {
 	WriteJSON(path, u)
 }
 
-func DailyActivity(path string, d []int) {
-	type Day struct {
-		Order int `json:"order"`
-		Lines int `json:"lines"`
-	}
-	var conv []Day
-	for i := 0; i < len(d); i++ {
-		conv = append(conv, Day{i, d[i]})
-	}
-	WriteJSON(path, conv)
+func DailyActivity(path string, d DailyStats) {
+	// Make first date yesterday from second day 
+	WriteJSON(path, d)
 }
 
 func WriteJSON(path string, data interface{}) {
