@@ -56,7 +56,12 @@ func FixFirst(d DailyStats) {
 }
 
 func WriteData(t TemplateStats) {
-	dataDir := "output/data/"
+	dataDir := "./output/data/"
+	if _, err := os.Stat(dataDir); err != nil {
+		if os.IsNotExist(err) {
+			os.MkdirAll(dataDir, 0755)
+		}
+	}
 
 	// write top15
 	path := dataDir + t.Name
