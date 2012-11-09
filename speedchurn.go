@@ -34,6 +34,7 @@ func main() {
 	Init()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	logs := flag.Args()
+
 	ch := make(chan ChanStats)
 
 	for _, file := range logs {

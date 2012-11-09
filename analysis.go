@@ -54,26 +54,27 @@ func MapChunk(source interface{}, output chan interface{}) {
 				fmt.Sscanf(translated, "%s %s", &transDay, &transMonth)
 				toParse := fmt.Sprintf("%s %s %s", translated, day[2], day[3])
 
+				newDay := Day{Lines: 1}
+				parseString := "Mon Jan 02 2006"
 				// *both* must differ (i.e. been translated)
 				if transDay != da && transMonth != month {
-					date, err := time.Parse("Mon Jan 2 2006", toParse)
+					date, err := time.Parse(parseString, toParse)
 					if err != nil {
 						panic(err)
 					}
-					dayStats = append(dayStats, Day{Lines: 1, Date: date})
+					newDay.Date = date
+					dayStats = append(dayStats, newDay)
 				} else if transDay == da && transMonth == month {
 					// try parsing it anyway, maybe it was in english?
-					date, err := time.Parse("Mon Jan 2 2006", toParse)
-					// couldn't parse. whatever.
-					if err != nil {
-						dayStats = append(dayStats, Day{Lines: 1})
-					} else {
-						dayStats = append(dayStats, Day{Lines: 1, Date: date})
+					if date, err := time.Parse(parseString, toParse); err == nil {
+						newDay.Date = date
 					}
+					dayStats = append(dayStats, newDay)
 				} else {
 					// no dice
-					dayStats = append(dayStats, Day{Lines: 1})
+					dayStats = append(dayStats, newDay)
 				}
+
 
 			case Topic:
 				impStats.topicChanges += 1
