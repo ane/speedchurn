@@ -52,6 +52,13 @@ func LinesAndWords(c ChanStats) (int, int) {
 }
 
 func FixFirst(d DailyStats) {
+	defer func() {
+		if r := recover(); r != nil {
+			debug.Println("ERROR: Date modification failed, because time stamps could not be read. Daily activity data will be broken!")
+			debug.Println("To fix this, specify the time stamp locale using \"-locale\" command line flag.")
+			debug.Println("Error:", r)
+		}
+	}()
 	d[0].Date = d[1].Date.AddDate(0, 0, -1)
 }
 
