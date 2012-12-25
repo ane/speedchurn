@@ -6,8 +6,8 @@ package main
 import (
 	"fmt"
 	"os"
-	"sync"
 	"runtime"
+	"sync"
 )
 
 var wg sync.WaitGroup
