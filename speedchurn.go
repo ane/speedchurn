@@ -4,7 +4,7 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"os"
 	"runtime"
 	"sync"
@@ -12,16 +12,29 @@ import (
 
 var wg sync.WaitGroup
 var matcher Matcher = new(IrssiMatcher)
+var Locale string
 
-func main() {
+type debugging bool
+
+const debug debugging = true
+
+func Init() {
 	args := os.Args
 
-	if len(args) < 2 {
-		panic("Usage: speedchurn <log1> <log2> ... <logN>")
-	}
+	// command line Flags
+	flag.StringVar(&Locale, "locale", "en_UK", "set log locale (e.g. en_US)")
+	flag.Parse()
 
+	if len(args) < 2 {
+		flag.Usage()
+	}
+}
+
+func main() {
+	Init()
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	logs := args[1:]
+	logs := flag.Args()
+
 	ch := make(chan ChanStats)
 
 	for _, file := range logs {
@@ -32,6 +45,7 @@ func main() {
 	go func() { wg.Wait(); close(ch) }()
 
 	for stats := range ch {
-		fmt.Println(stats.stats)
+		debug.Println("Writing output...")
+		Output(Produce(stats))
 	}
 }
