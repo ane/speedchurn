@@ -12,6 +12,8 @@ Current status
    * lines and words for each user
    * topic changes
    * number of elapsed days
+ * automatic alt-nick (nick_ -> nick) recognition and merging 
+ * distributed stats calculation using map/reduce and parallelism
 
 Installation
 ------------
