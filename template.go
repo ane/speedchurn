@@ -63,7 +63,7 @@ func FixFirst(d DailyStats) {
 }
 
 func WriteData(t TemplateStats) {
-	dataDir := "./output/data/"
+	dataDir := "output/data/"
 	if _, err := os.Stat(dataDir); err != nil {
 		if os.IsNotExist(err) {
 			os.MkdirAll(dataDir, 0755)
@@ -81,7 +81,7 @@ func Top15(path string, u Users) {
 }
 
 func DailyActivity(path string, d DailyStats) {
-	// Make first date yesterday from second day 
+	// Make first date yesterday from second day
 	WriteJSON(path, d)
 }
 

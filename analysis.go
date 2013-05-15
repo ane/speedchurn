@@ -40,6 +40,8 @@ func MapChunk(source interface{}, output chan interface{}) {
 			default:
 				//fmt.Println("type is %T", typ)
 			case []string:
+				// TODO: get this into another method, this is awful.
+
 				impStats.dayChanges += 1
 				dayCounter++
 
@@ -74,7 +76,6 @@ func MapChunk(source interface{}, output chan interface{}) {
 					// no dice
 					dayStats = append(dayStats, newDay)
 				}
-
 
 			case Topic:
 				impStats.topicChanges += 1
