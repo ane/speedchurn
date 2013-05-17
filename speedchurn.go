@@ -13,6 +13,7 @@ import (
 var wg sync.WaitGroup
 var matcher Matcher = new(IrssiMatcher)
 var Locale string
+var Cores int
 
 type debugging bool
 
@@ -23,6 +24,7 @@ func Init() {
 
 	// command line Flags
 	flag.StringVar(&Locale, "locale", "en_UK", "set log locale (e.g. en_US)")
+	flag.IntVar(&Cores, "cpus", 1, "number of logical CPUs to use")
 	flag.Parse()
 
 	if len(args) < 2 {
@@ -32,12 +34,16 @@ func Init() {
 
 func main() {
 	Init()
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	runtime.GOMAXPROCS(Cores)
 	logs := flag.Args()
 
 	ch := make(chan ChanStats)
 
 	for _, file := range logs {
+		if _, err := os.Stat(file); err != nil {
+			debug.Println("Can't find file ", file)
+			continue
+		}
 		wg.Add(1)
 		go Churn(file, ch)
 	}
