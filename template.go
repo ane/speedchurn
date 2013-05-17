@@ -25,7 +25,7 @@ func Produce(c ChanStats) TemplateStats {
 	var name string
 	name = parts[0]
 	l, w := LinesAndWords(c)
-	FixFirst(c.stats.daily)
+	c.stats.daily = FixFirst(c.stats.daily)
 
 	return TemplateStats{
 		Name:        name,
@@ -51,7 +51,7 @@ func LinesAndWords(c ChanStats) (int, int) {
 	return lines, words
 }
 
-func FixFirst(d DailyStats) {
+func FixFirst(d DailyStats) DailyStats {
 	defer func() {
 		if r := recover(); r != nil {
 			debug.Println("ERROR: Date modification failed, because time stamps could not be read. Daily activity data will be broken!")
@@ -60,6 +60,12 @@ func FixFirst(d DailyStats) {
 		}
 	}()
 	d[0].Date = d[1].Date.AddDate(0, 0, -1)
+	newStats := make([]Day, len(d)/3)
+	newStats[0] = d[0]
+	for i := 1; (i * 3) < len(d)-3; i++ {
+		newStats[i] = d[i*3]
+	}
+	return newStats
 }
 
 func WriteData(t TemplateStats) {
